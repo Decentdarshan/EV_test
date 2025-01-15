@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Papa from "papaparse";
+import VehicleCountByCounty from "./components/VehicleCountByCounty";
+import KeyMetrics from "./components/KeyMetrics";
 
-function App() {
+const App = () => {
+  const [data, setData] = useState([]);
+
+  // Load and parse the CSV file
+  useEffect(() => {
+    Papa.parse("/Electric_Vehicle_Population_Data.csv", {
+      download: true,
+      header: true,
+      complete: (result) => setData(result.data),
+    });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ padding: "20px" }}>
+      <h1>Electric Vehicle Insights Dashboard</h1>
+      {data.length > 0 ? (
+        <>
+          <KeyMetrics data={data} />
+          <VehicleCountByCounty data={data} />
+        </>
+      ) : (
+        <p>Loading data...</p>
+      )}
     </div>
   );
-}
+};
 
 export default App;
