@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/EV_test/static/css/main.e6c13ad2.css",
+    "main.js": "/EV_test/static/js/main.5045508d.js",
+    "index.html": "/EV_test/index.html",
+    "main.e6c13ad2.css.map": "/EV_test/static/css/main.e6c13ad2.css.map",
+    "main.5045508d.js.map": "/EV_test/static/js/main.5045508d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.5045508d.js"
+  ]
+}
