@@ -2,17 +2,20 @@ import React from "react";
 
 const KeyMetrics = ({ data }) => {
   const totalVehicles = data.length;
+
   const averageRange = (
     data.reduce((sum, row) => sum + (parseInt(row["Electric Range"]) || 0), 0) / totalVehicles
   ).toFixed(2);
 
   const topMake = data.reduce((acc, row) => {
-    acc[row.Make] = (acc[row.Make] || 0) + 1;
+    const make = row["Make"]?.trim();
+    if (make) acc[make] = (acc[make] || 0) + 1;
     return acc;
   }, {});
-  const mostPopularMake = Object.keys(topMake).reduce((a, b) =>
-    topMake[a] > topMake[b] ? a : b
-  );
+
+  const mostPopularMake = Object.keys(topMake).length > 0
+    ? Object.keys(topMake).reduce((a, b) => (topMake[a] > topMake[b] ? a : b))
+    : "No data";
 
   return (
     <div style={{ display: "flex", justifyContent: "space-around", marginBottom: "20px" }}>

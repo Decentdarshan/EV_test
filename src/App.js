@@ -1,31 +1,40 @@
 import React, { useState, useEffect } from "react";
 import Papa from "papaparse";
-import VehicleCountByCounty from "./components/VehicleCountByCounty";
 import KeyMetrics from "./components/KeyMetrics";
+import VehicleCountByCounty from "./components/VehicleCountByCounty";
 
 const App = () => {
   const [data, setData] = useState([]);
 
-  // Load and parse the CSV file
   useEffect(() => {
-    Papa.parse("/Electric_Vehicle_Population_Data.csv", {
-      download: true,
-      header: true,
-      complete: (result) => setData(result.data),
-    });
+    fetch(`${process.env.PUBLIC_URL}/Electric_Vehicle_Population_Data.csv`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("CSV file not found");
+        }
+        return response.text();
+      })
+      .then((csvData) => {
+        Papa.parse(csvData, {
+          header: true,
+          skipEmptyLines: true,
+          complete: (result) => {
+            console.log("Parsed Data:", result.data);
+            setData(result.data);
+          },
+        });
+      })
+      .catch((error) => console.error("Error loading CSV:", error));
   }, []);
+  
+  
+  
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Electric Vehicle Insights Dashboard</h1>
-      {data.length > 0 ? (
-        <>
-          <KeyMetrics data={data} />
-          <VehicleCountByCounty data={data} />
-        </>
-      ) : (
-        <p>Loading data...</p>
-      )}
+    <div>
+      <h1>Electric Vehicle Dashboard</h1>
+      <KeyMetrics data={data} />
+      <VehicleCountByCounty data={data} />
     </div>
   );
 };
